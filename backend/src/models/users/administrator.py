@@ -1,6 +1,8 @@
 from sqlalchemy import Column, Integer, String
+
 from database.database import Base
 from models.users.user import User
+from models.data.data import Data
 
 class Administrator(User, Base):
     __tablename__ = 'Administrator'
@@ -13,5 +15,5 @@ class Administrator(User, Base):
     def change_rights(user_id: int) -> None:
         pass 
 
-    def change_role(user_id: int) -> None:
+    def change_role(user_id: int) -> Data:
         pass 

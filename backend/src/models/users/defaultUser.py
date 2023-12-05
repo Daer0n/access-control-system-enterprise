@@ -9,3 +9,9 @@ class DefaultUser(User, Base):
     name = Column(String, nullable=False)
     email = Column(String, nullable=False)
     role = Column(String, default='Default user')
+
+    def role_request() -> None:
+        pass
+
+    def right_request(right_type: String) -> None:
+        pass
