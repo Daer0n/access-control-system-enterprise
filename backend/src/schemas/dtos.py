@@ -1,8 +1,6 @@
 from pydantic import BaseModel
 from typing import List
 
-from sqlalchemy import LargeBinary
-
 from shared.shared import FolderAccessType
 
 class SaveUserDto(BaseModel):
