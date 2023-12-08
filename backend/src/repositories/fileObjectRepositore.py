@@ -1,21 +1,20 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import insert, delete, select
-
 from fastapi import HTTPException
 
+from dataclasses import dataclass
 from pydantic import BaseModel
-
 from typing import Union
 
 from models.objectFileDirectory.file import File
 from models.objectFileDirectory.folder import Folder
 
-
-class GetFileObjectRepositoreFilter(BaseModel):
+@dataclass(frozen=True)
+class GetFileObjectRepositoreFilter:
     id: int | None = None
     name: str | None = None
 
-class PatchFileObjectRepositoreFilter(BaseModel):
+class PatchFileObjectRepositoreFilter:
     id: int
     name: str | None = None
     path: str | None = None

@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
 
 #from operations.router import router
+
+from routers.auth import create_router as create_auth_router
 
 
 app = FastAPI(
@@ -20,4 +23,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-#app.include_router(router)
+SessionLocal = async_sessionmaker(expire_on_commit=False, bind=engine)
+
+async def get_service():
+    async with SessionLocal() as session:
+        async with session.begin():
+            service = Service.from_session(session)
+            yield service
+
+auth_router = create_auth_router(get_service)
+app.include_router(auth_router, tags=["auth"])

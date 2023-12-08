@@ -1,22 +1,21 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import insert, delete, select
-
 from fastapi import HTTPException
 
-from pydantic import BaseModel
-
+from dataclasses import dataclass
 from typing import Union
 
 from models.users.moderator import Moderator
 from models.users.administrator import Administrator
 from models.users.defaultUser import DefaultUser
 
-
-class GetUserFilter(BaseModel):
+@dataclass(frozen=True)
+class GetUserFilter:
     id: int | None = None
     name: str | None = None
 
-class PatchUserFilter(BaseModel):
+@dataclass(frozen=True)
+class PatchUserFilter:
     id: int
     name: str | None = None
     email: str | None = None
