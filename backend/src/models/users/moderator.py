@@ -5,12 +5,9 @@ from database.database import Base
 from models.users.user import User
 from schemas.dtos import SaveUserDto
 
-class Moderator(User, Base):
+class Moderator(User):
     __tablename__ = 'Moderator'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, nullable=False)
-    email = Column(String, nullable=False)
     role = Column(String, default='Moderator')
     
     @staticmethod

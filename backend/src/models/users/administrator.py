@@ -6,12 +6,10 @@ from database.database import Base
 from models.users.user import User
 from schemas.dtos import SaveUserDto
 
-class Administrator(User, Base):
+class Administrator(User):
     __tablename__ = 'Administrator'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, nullable=False)
-    email = Column(String, nullable=False)
     role = Column(String, default='Administrator')
 
     @staticmethod

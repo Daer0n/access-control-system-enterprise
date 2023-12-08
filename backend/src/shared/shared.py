@@ -1,6 +1,6 @@
 from enum import Enum
 
-class FolderAccessType(Enum):
+class FolderTypeAccess(Enum):
     READ = 'Read'
     WRITE = 'Write'
     DELETE = 'Delete'

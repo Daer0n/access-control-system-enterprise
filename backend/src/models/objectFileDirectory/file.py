@@ -1,18 +1,24 @@
 
-from sqlalchemy import Column, Integer, LargeBinary, ForeignKey
+from sqlalchemy import Column, Integer, LargeBinary, ForeignKey, Enum
+from sqlalchemy.ext.declarative import declared_attr
 
 from database.database import Base
+
+from shared.shared import FolderTypeAccess
 
 from models.objectFileDirectory.folder import Folder
 from models.objectFileDirectory.objectFileDirectory import ObjectFileDirectory
 from schemas.dtos import SaveFileDto
 
-class File(ObjectFileDirectory, Base):
+class File(ObjectFileDirectory):
     __tablename__ = 'File'
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
     body = Column(LargeBinary, nullable=False)
-    folder_id = Column(Integer, ForeignKey(Folder.id))
+    access_type = Column(Enum(FolderTypeAccess))
+
+    @declared_attr
+    def folder_id(cls):
+        return Column(Integer, ForeignKey(Folder.id))
 
     @staticmethod
     def from_dto(dto: SaveFileDto) -> 'File':

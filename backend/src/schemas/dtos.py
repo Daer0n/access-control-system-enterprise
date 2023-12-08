@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import List
 
-from shared.shared import FolderAccessType
+from shared.shared import FolderTypeAccess
 
 class SaveUserDto(BaseModel):
     name: str
@@ -10,7 +10,7 @@ class SaveUserDto(BaseModel):
 
 class SaveRightDto(BaseModel):
     folder_id: int
-    rights:  FolderAccessType
+    rights:  FolderTypeAccess
 
 class SaveFileDto(BaseModel):
     name: str
