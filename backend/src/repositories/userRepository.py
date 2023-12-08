@@ -114,7 +114,7 @@ class UserRepository():
         return items 
     
     async def update_administrator(self, filter: PatchUserFilter):
-        administrator = await self._get_user_by_id(filter.id)
+        administrator = await self._get_user_by_id(filter.id, "administrator")
         if filter.name is not None:
             administrator.name = filter.name
         if filter.email is not None:
@@ -122,7 +122,7 @@ class UserRepository():
         return self.save_administrator(administrator)
     
     async def update_moderator(self, filter: PatchUserFilter):
-        moderator = await self._get_user_by_id(filter.id)
+        moderator = await self._get_user_by_id(filter.id, "moderator")
         if filter.name is not None:
             moderator.name = filter.name
         if filter.email is not None:
@@ -130,7 +130,7 @@ class UserRepository():
         return self.save_moderator(moderator)
     
     async def update_default_user(self, filter: PatchUserFilter):
-        user = await self._get_user_by_id(filter.id)
+        user = await self._get_user_by_id(filter.id, "user")
         if filter.name is not None:
             user.name = filter.name
         if filter.email is not None:

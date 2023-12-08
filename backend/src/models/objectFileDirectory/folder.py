@@ -1,9 +1,13 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import relationship
+
 from database.database import Base
+
 from schemas.dtos import SaveFolderDto
 
-class Folder(Base):
+from models.objectFileDirectory.objectFileDirectory import ObjectFileDirectory
+
+class Folder(ObjectFileDirectory, Base):
     __tablename__ = 'Folder'
 
     id = Column(Integer, primary_key=True, autoincrement=True)

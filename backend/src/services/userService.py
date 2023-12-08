@@ -3,17 +3,13 @@ from contextlib import asynccontextmanager
 from sqlalchemy.ext.asyncio import AsyncEngine
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
-from repositories.userRepositories.user import UserRepository
+from repositories.userRepository import UserRepository, GetUserFilter, PatchUserFilter
 
 from schemas.dtos import SaveUserDto
 
 from models.users.administrator import Administrator
 from models.users.moderator import Moderator
 from models.users.defaultUser import DefaultUser
-
-from services.userService import UserRepository
-
-from repositories.userRepositories.user import GetUserFilter, PatchUserFilter
 
 class UserService:
     def __init__(self, database: UserRepository):
