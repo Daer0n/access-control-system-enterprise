@@ -10,3 +10,5 @@ DB_USER = os.environ.get("DB_USER")
 DB_PASS = os.environ.get("DB_PASS")
 
 SECRET_AUTH = os.environ.get("SECRET_AUTH")
+AUTH_ACCESS_TOKEN_EXPIRE_MINUTES=os.environ.get("AUTH_ACCESS_TOKEN_EXPIRE_MINUTES")
+AUTH_ALGORITHM = os.environ.get("AUTH_ALGORITHM")

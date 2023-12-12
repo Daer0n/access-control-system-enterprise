@@ -1,4 +1,5 @@
 import os 
+import jwt
 
 from datetime import datetime, timedelta
 
@@ -7,7 +8,6 @@ from fastapi.responses import ORJSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from typing import Annotated, Any, AsyncGenerator, Callable, Union
 from pydantic import BaseModel  
-from jose import jwt
 from passlib.context import CryptContext
 
 from models.users.moderator import Moderator
@@ -63,7 +63,34 @@ def create_router(
         )
 
         return response
+    
+    @router.post("/register")
+    async def register_user(
+        form_data: DefaultUser,
+        service: UserService = Depends(get_service),
+    ):
+        user_exists = await _get_user(form_data.name, service)
+        if user_exists:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="User exists",
+            )
 
+        hashed_password = __hash_password(form_data.password)
+
+        new_user = DefaultUser(
+            name=form_data.name,
+            password=hashed_password,
+            email=form_data.email,
+        )
+
+        # Сохранить нового пользователя
+        await service.create_default_user(new_user)
+
+        return {"message": "User has been successfully registered"}
+
+    def __hash_password(password: str) -> str:
+        return pwd_context.hash(password)
 
     async def _get_user(username: str, service: UserService) -> Union[Administrator, Moderator, DefaultUser]:
         filter = GetUserFilter(name=username)
@@ -101,4 +128,6 @@ def create_router(
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, SECRET_AUTH, algorithm=ALGORITHM)
         return encoded_jwt
+    
+    return router
     

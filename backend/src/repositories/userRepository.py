@@ -135,10 +135,3 @@ class UserRepository():
         if filter.email is not None:
             user.email = filter.email
         return self.save_default_user(user)
-
-
-    def change_body() -> LargeBinary:
-        pass
-
-    def delete() -> None:
-        pass
