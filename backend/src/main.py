@@ -7,6 +7,7 @@ from database.database import engine
 from schemas.schemas import UserCreate, UserRead
 from auth.base_config import auth_backend, fastapi_users
 from routers.auth import create_router as create_auth_router
+from routers.userRouter import create_router as create_api_router
 
 
 app = FastAPI(
@@ -44,3 +45,6 @@ app.include_router(
     prefix="/auth",
     tags=["Auth"],
 )
+
+api_royter = create_api_router(get_service)
+app.include_router(api_royter, prefix="/user", tags=["user"])

@@ -9,9 +9,11 @@ from models.users.moderator import Moderator
 from models.users.administrator import Administrator
 from models.users.defaultUser import DefaultUser
 
+from auth.manager import UserManager
+
 @dataclass(frozen=True)
 class GetUserFilter:
-    id: int | None = None
+    id: int
     name: str | None = None
 
 @dataclass(frozen=True)
@@ -37,11 +39,12 @@ class UserRepository():
         else:
             raise ValueError("Invalid user_type specified.")
 
-    async def save_administrator(self, model: Administrator):
-        async with self.session.begin():
-            stmt = insert(Administrator).values(**model.dict())
-            await self.session.execute(stmt)
-            await self.session.commit()
+    async def save_administrator(self, administrator: Administrator):
+        async with self.session.begin_nested():
+            self.session.add(administrator)
+            await self.session.flush()
+        await self.session.commit()
+        return administrator
 
     async def save_moderator(self, model: Moderator):
         async with self.session.begin():
@@ -114,24 +117,33 @@ class UserRepository():
     
     async def update_administrator(self, filter: PatchUserFilter):
         administrator = await self._get_user_by_id(filter.id, "administrator")
-        if filter.name is not None:
-            administrator.name = filter.name
-        if filter.email is not None:
-            administrator.email = filter.email
-        return self.save_administrator(administrator)
+        if administrator is not None:
+            if filter.name is not None:
+                administrator.name = filter.name
+            if filter.email is not None:
+                administrator.email = filter.email
+            return await self.save_administrator(administrator)
+        else:
+            raise ValueError("Administrator not found.")
     
     async def update_moderator(self, filter: PatchUserFilter):
         moderator = await self._get_user_by_id(filter.id, "moderator")
-        if filter.name is not None:
-            moderator.name = filter.name
-        if filter.email is not None:
-            moderator.email = filter.email
-        return self.save_moderator(moderator)
+        if moderator is not None:
+            if filter.name is not None:
+                moderator.name = filter.name
+            if filter.email is not None:
+                moderator.email = filter.email
+            return await self.save_administrator(moderator)
+        else:
+            raise ValueError("Administrator not found.")
     
     async def update_default_user(self, filter: PatchUserFilter):
         user = await self._get_user_by_id(filter.id, "user")
-        if filter.name is not None:
-            user.name = filter.name
-        if filter.email is not None:
-            user.email = filter.email
-        return self.save_default_user(user)
+        if user is not None:
+            if filter.name is not None:
+                user.name = filter.name
+            if filter.email is not None:
+                user.email = filter.email
+            return await self.save_default_user(user)
+        else:
+            raise ValueError("User not found.")

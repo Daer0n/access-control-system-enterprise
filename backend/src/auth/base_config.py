@@ -2,6 +2,8 @@ from fastapi_users import FastAPIUsers
 from fastapi_users.authentication import CookieTransport, AuthenticationBackend
 from fastapi_users.authentication import JWTStrategy
 
+from typing import Union
+
 from auth.manager import get_user_manager
 from models.users.administrator import Administrator
 from models.users.defaultUser import DefaultUser
@@ -20,7 +22,7 @@ auth_backend = AuthenticationBackend(
     get_strategy=get_jwt_strategy,
 )
 
-fastapi_users = FastAPIUsers[DefaultUser, int](
+fastapi_users = FastAPIUsers[Union[DefaultUser, Administrator, Moderator], int](
     get_user_manager,
     [auth_backend],
 )

@@ -7,6 +7,7 @@ class SaveUserDto(BaseModel):
     name: str
     email: str
     role: str
+    password: str
 
 class SaveRightDto(BaseModel):
     folder_id: int

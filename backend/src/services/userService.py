@@ -11,9 +11,9 @@ from models.users.administrator import Administrator
 from models.users.moderator import Moderator
 from models.users.defaultUser import DefaultUser
 
-class UserService:
-    def __init__(self, database: UserRepository):
-        self._database = database
+class UserService():
+    def __init__(self, db: AsyncSession):
+        self._database = UserRepository(db) 
 
     @staticmethod
     @asynccontextmanager
@@ -26,9 +26,14 @@ class UserService:
     def from_session(session: AsyncSession) -> UserService:
         database = UserRepository(session)
         return UserService(database)
-    
+
     async def save_administrator(self, dto: SaveUserDto):
-        model = Administrator.from_dto(dto)
+        model = Administrator(
+            name=dto.name,
+            email=dto.email,
+            role=dto.role,
+            hashed_password=dto.password
+        )
         return await self._database.save_administrator(model)
     
     async def save_moderator(self, dto: SaveUserDto):
@@ -63,7 +68,7 @@ class UserService:
     async def update_moderator(self, filter: PatchUserFilter):
         return await self._database.update_moderator(filter)
     
-    async def update_administrator(self, filter: PatchUserFilter):
+    async def update_default_user(self, filter: PatchUserFilter):
         return await self._database.update_default_user(filter)
     
 
