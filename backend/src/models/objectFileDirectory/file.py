@@ -19,7 +19,7 @@ class File(ObjectFileDirectory):
     @declared_attr
     def folder_id(cls):
         return Column(Integer, ForeignKey(Folder.id))
-
+    
     @staticmethod
     def from_dto(dto: SaveFileDto) -> 'File':
         return File(

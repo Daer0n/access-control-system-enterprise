@@ -2,6 +2,7 @@ from typing import Optional
 
 from fastapi_users import schemas
 from pydantic import BaseModel, Field
+from shared.shared import FolderTypeAccess
 
 
 class UserRead(schemas.BaseUser[int]):
@@ -30,6 +31,7 @@ class FileCreate(BaseModel):
     path: str
     body: bytes = Field(..., description="Binary data of the file")
     folder_id: int
+    access_type: FolderTypeAccess
 
 class FolderCreate(BaseModel):
     name: str
