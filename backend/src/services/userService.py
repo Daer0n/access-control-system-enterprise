@@ -81,4 +81,10 @@ class UserService():
     async def update_default_user(self, filter: PatchUserFilter):
         return await self._database.update_default_user(filter)
     
+    async def change_user_role(self, filter: GetUserFilter):
+        return await self._database.change_user_role(filter)
+    
+    async def change_moderator_role(self, filter: GetUserFilter):
+        return await self._database.change_moderator_role(filter)
+    
 

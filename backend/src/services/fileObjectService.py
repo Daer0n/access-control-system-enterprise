@@ -8,7 +8,7 @@ from models.objectFileDirectory.folder import Folder
 
 from schemas.dtos import SaveFileDto, SaveFolderDto
 
-from repositories.fileObjectRepositore import FileObjectRepostitore, GetFileObjectRepositoreFilter, PatchFileObjectRepositoreFilter
+from repositories.fileObjectRepositore import FileObjectRepostitore, GetFileObjectRepositoreFilter, PatchFileRightsFilter
 
 class FileObjectService:
     def __init__(self, db: AsyncSession):
@@ -60,3 +60,6 @@ class FileObjectService:
     
     async def update_folder(self, filter: GetFileObjectRepositoreFilter):
         return await self._database.update_folder(filter)
+    
+    async def change_file_rights(self, filter: PatchFileRightsFilter):
+        return await self._database.change_file_rights(filter)

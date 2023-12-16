@@ -9,8 +9,6 @@ from models.users.moderator import Moderator
 from models.users.administrator import Administrator
 from models.users.defaultUser import DefaultUser
 
-from fastapi_users import BaseUserManager
-
 @dataclass(frozen=True)
 class GetUserFilter:
     id: int
@@ -39,18 +37,16 @@ class UserRepository():
         else:
             raise ValueError("Invalid user_type specified.")
 
-    async def save_administrator(self, administrator: Administrator):
+    async def save_administrator(self, administrator: Moderator):
         async with self.session.begin_nested():
             self.session.add(administrator)
             await self.session.flush()
-        await self.session.commit()
         return administrator
 
     async def save_moderator(self, moderator: Moderator):
         async with self.session.begin_nested():
             self.session.add(moderator)
             await self.session.flush()
-        await self.session.commit()
         return moderator
 
     async def save_default_user(self, user: DefaultUser):
@@ -149,3 +145,24 @@ class UserRepository():
             return await self.save_default_user(user)
         else:
             raise ValueError("User not found.")
+        
+    async def change_user_role(self, filter: GetUserFilter):
+        user = await self._get_user_by_id(filter.id, "user")
+        if user is not None:
+            user.role = 'Moderator'
+            await self.save_moderator(user)
+            await self.delete_default_user(filter)
+            return {'ok': True}
+        else:
+            raise ValueError("User not found.")
+        
+    async def change_moderator_role(self, filter: GetUserFilter):
+        moderator = await self._get_user_by_id(filter.id, "moderator")
+        if moderator is not None:
+            moderator.role = 'Administrator'
+            await self.save_administrator(moderator)
+            await self.delete_moderator(filter)
+            return {'ok': True}
+        else:
+            raise ValueError("Moderator not found.")
+        

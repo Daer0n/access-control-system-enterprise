@@ -106,7 +106,7 @@ def create_router(
 
 
     @router.patch(
-        "administrator/{id}/",
+        "/administrator/{id}/",
         name="Patch administrator",
     )
     async def update_administrator(
@@ -121,7 +121,37 @@ def create_router(
             email=email,
         )
         return await service.update_administrator(filter)
+
+    @router.get(
+        "/administrator/user/{user_id}/",
+        name="Change role to moderator",
+    )
+    async def change_user_role(
+        user_id: int, 
+        name: Optional[str] = None,
+        service: UserService = Depends(get_service),
+    ):
+        filter = GetUserFilter(       
+            id=user_id, 
+            name=name,
+        )
+        return await service.change_user_role(filter)
     
+    @router.get(
+        "/administrator/moderator/{moderator_id}/",
+        name="Change role to moderator",
+    )
+    async def change_user_role(
+        moderator_id: int, 
+        name: Optional[str] = None,
+        service: UserService = Depends(get_service),
+    ):
+        filter = GetUserFilter(       
+            id=moderator_id, 
+            name=name,
+        )
+        return await service.change_moderator_role(filter)
+
     @router.post(
         "/moderator/{name}/{email}/{password}/",
         name="Add moderator",
@@ -253,5 +283,7 @@ def create_router(
             email=email,
         )
         return await service.update_default_user(filter)
+        
+    
 
     return router

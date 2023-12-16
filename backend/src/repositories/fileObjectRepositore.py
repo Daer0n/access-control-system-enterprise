@@ -8,6 +8,7 @@ from typing import Union
 
 from models.objectFileDirectory.file import File
 from models.objectFileDirectory.folder import Folder
+from shared.shared import FolderTypeAccess
 
 @dataclass(frozen=True)
 class GetFileObjectRepositoreFilter:
@@ -19,6 +20,12 @@ class PatchFileObjectRepositoreFilter:
     id: int
     name: str | None = None
     path: str | None = None
+
+@dataclass(frozen=True)
+class PatchFileRightsFilter:
+    id: int
+    access_type: FolderTypeAccess
+    name: str | None = None
 
 class FileObjectRepostitore:
     def __init__(self, session: AsyncSession):
@@ -101,4 +108,11 @@ class FileObjectRepostitore:
         if filter.path is not None:
             folder.path = filter.path
         return await self.save_folder(folder)
+    
+    async def change_file_rights(self, filter: PatchFileRightsFilter):
+        file = await self._get_object_by_id(filter.id, "file")
+        if file is not None:
+            file.access_type = filter.access_type
+        return await self.save_file(file)
+
 

@@ -5,7 +5,7 @@ from typing import Annotated, Any, AsyncGenerator, Callable, Optional
 from fastapi import APIRouter, Depends, UploadFile, File
 from pydantic import BaseModel
 
-from repositories.fileObjectRepositore import GetFileObjectRepositoreFilter, PatchFileObjectRepositoreFilter
+from repositories.fileObjectRepositore import GetFileObjectRepositoreFilter, PatchFileObjectRepositoreFilter, PatchFileRightsFilter
 from services.fileObjectService import FileObjectService
 from schemas.schemas import FileCreate, FolderCreate
 from shared.shared import FolderTypeAccess
@@ -151,5 +151,22 @@ def create_router(
             path=path,
         )
         return await service.update_folder(filter)
+    
+    @router.patch(
+        "/user/{file_id}/",
+        name="Change file rights",
+    )
+    async def change_file_rights(
+        file_id: int, 
+        access_type: FolderTypeAccess,
+        name: Optional[str] = None,
+        service: FileObjectService = Depends(get_service),
+    ):
+        filter = PatchFileRightsFilter(
+            id=file_id, 
+            name=name,
+            access_type=access_type,
+        )
+        return await service.change_file_rights(filter)
 
     return router
