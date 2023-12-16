@@ -121,5 +121,137 @@ def create_router(
             email=email,
         )
         return await service.update_administrator(filter)
+    
+    @router.post(
+        "/moderator/{name}/{email}/{password}/",
+        name="Add moderator",
+    )
+    async def add_moderator(
+        name: str, 
+        email: str, 
+        password: str,
+        service: UserService = Depends(get_service),
+    ):
+        dto = UserCreate(
+            name=name,
+            email=email,
+            role='Moderator',
+            password=password
+        )
+        return await service.save_moderator(dto)
+    
+    @router.delete(
+        "/moderator/{id}/",
+        name="Delete moderator",
+    )
+    async def delete_moderator(
+        id: int,
+        name: Optional[str] = None,
+        service: UserService = Depends(get_service),
+    ):
+        filter = GetUserFilter(
+            id=id,
+            name=name
+        )
+        return await service.delete_moderator(filter)
+    
+    @router.get(
+        "/moderator/{id}/",
+        name="Get moderator",
+    )
+    async def read_moderator(
+        id: int,
+        name: Optional[str] = None,
+        service: UserService = Depends(get_service),
+    ):
+        filter = GetUserFilter(
+            id=id,
+            name=name
+        )
+        return await service.read_moderator(filter)
+
+
+    @router.patch(
+        "/moderator/{id}/",
+        name="Patch moderator",
+    )
+    async def update_moderator(
+        id: int, 
+        name: Optional[str] = None,
+        email: Optional[str] = None,
+        service: UserService = Depends(get_service),
+    ):
+        filter = PatchUserFilter(
+            id=id, 
+            name=name,
+            email=email,
+        )
+        return await service.update_moderator(filter)
+    
+    @router.post(
+        "/user/{name}/{email}/{password}/",
+        name="Add default user",
+    )
+    async def add_default_user(
+        name: str, 
+        email: str, 
+        password: str,
+        service: UserService = Depends(get_service),
+    ):
+        dto = UserCreate(
+            name=name,
+            email=email,
+            role='DefaultUser',
+            password=password
+        )
+        return await service.save_default_user(dto)
+    
+    @router.delete(
+        "/user/{id}/",
+        name="Delete default user",
+    )
+    async def delete_default_user(
+        id: int,
+        name: Optional[str] = None,
+        service: UserService = Depends(get_service),
+    ):
+        filter = GetUserFilter(
+            id=id,
+            name=name
+        )
+        return await service.delete_default_user(filter)
+    
+    @router.get(
+        "/user/{id}/",
+        name="Get default user",
+    )
+    async def read_default_user(
+        id: int,
+        name: Optional[str] = None,
+        service: UserService = Depends(get_service),
+    ):
+        filter = GetUserFilter(
+            id=id,
+            name=name
+        )
+        return await service.read_default_user(filter)
+
+
+    @router.patch(
+        "user/{id}/",
+        name="Patch default user",
+    )
+    async def update_default_user(
+        id: int, 
+        name: Optional[str] = None,
+        email: Optional[str] = None,
+        service: UserService = Depends(get_service),
+    ):
+        filter = PatchUserFilter(
+            id=id, 
+            name=name,
+            email=email,
+        )
+        return await service.update_default_user(filter)
 
     return router

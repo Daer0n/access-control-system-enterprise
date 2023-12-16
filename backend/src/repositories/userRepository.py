@@ -9,7 +9,7 @@ from models.users.moderator import Moderator
 from models.users.administrator import Administrator
 from models.users.defaultUser import DefaultUser
 
-from auth.manager import UserManager
+from fastapi_users import BaseUserManager
 
 @dataclass(frozen=True)
 class GetUserFilter:
@@ -46,17 +46,19 @@ class UserRepository():
         await self.session.commit()
         return administrator
 
-    async def save_moderator(self, model: Moderator):
-        async with self.session.begin():
-            stmt = insert(Moderator).values(**model.dict())
-            await self.session.execute(stmt)
-            await self.session.commit()
+    async def save_moderator(self, moderator: Moderator):
+        async with self.session.begin_nested():
+            self.session.add(moderator)
+            await self.session.flush()
+        await self.session.commit()
+        return moderator
 
-    async def save_default_user(self, model: DefaultUser):
-        async with self.session.begin():
-            stmt = insert(DefaultUser).values(**model.dict())
-            await self.session.execute(stmt)
-            await self.session.commit()
+    async def save_default_user(self, user: DefaultUser):
+        async with self.session.begin_nested():
+            self.session.add(user)
+            await self.session.flush()
+        await self.session.commit()
+        return user
 
     async def delete_administrator(self, filter: GetUserFilter):
         models = await self.read_administrator(filter)

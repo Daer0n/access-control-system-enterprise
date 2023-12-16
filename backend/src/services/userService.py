@@ -37,11 +37,21 @@ class UserService():
         return await self._database.save_administrator(model)
     
     async def save_moderator(self, dto: SaveUserDto):
-        model = Moderator.from_dto(dto)
+        model = Moderator(
+            name=dto.name,
+            email=dto.email,
+            role=dto.role,
+            hashed_password=dto.password
+        )
         return await self._database.save_moderator(model)
     
     async def save_default_user(self, dto: SaveUserDto):
-        model = DefaultUser.from_dto(dto)
+        model = DefaultUser(
+            name=dto.name,
+            email=dto.email,
+            role=dto.role,
+            hashed_password=dto.password
+        )
         return await self._database.save_default_user(model)
     
     async def delete_administrator(self, filter: GetUserFilter):
