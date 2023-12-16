@@ -26,5 +26,6 @@ class File(ObjectFileDirectory):
             name = dto.name,
             path = dto.path,
             body = dto.body,
-            folder_id = dto.folder_id
+            folder_id = dto.folder_id,
+            access_type = dto.access_type
         )

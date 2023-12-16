@@ -115,7 +115,7 @@ def create_router(
         email: Optional[str] = None,
         service: UserService = Depends(get_service),
     ):
-        filter = PatchUserFilter(
+        filter = PatchUserFilter(       
             id=id, 
             name=name,
             email=email,

@@ -1,13 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
-from services.userService import UserService
-from database.database import engine
 
+from services.userService import UserService
+from services.fileObjectService import FileObjectService
+from database.database import engine
 from schemas.schemas import UserCreate, UserRead
 from auth.base_config import auth_backend, fastapi_users
-from routers.auth import create_router as create_auth_router
-from routers.userRouter import create_router as create_api_router
+from routers.fileObjectRouter import create_router as create_file_object_router
+from routers.userRouter import create_router as create_user_router
+
 
 
 app = FastAPI(
@@ -28,10 +30,16 @@ app.add_middleware(
 
 SessionLocal = async_sessionmaker(expire_on_commit=False, bind=engine)
 
-async def get_service():
+async def get_user_service():
     async with SessionLocal() as session:
         async with session.begin():
             service = UserService(session)
+            yield service
+
+async def get_file_object_service():
+    async with SessionLocal() as session:
+        async with session.begin():
+            service = FileObjectService(session)
             yield service
 
 app.include_router(
@@ -46,5 +54,8 @@ app.include_router(
     tags=["Auth"],
 )
 
-api_royter = create_api_router(get_service)
-app.include_router(api_royter, prefix="/user", tags=["user"])
+user_router = create_user_router(get_user_service)
+app.include_router(user_router, prefix="/user", tags=["user"])
+
+file_router = create_file_object_router(get_file_object_service)
+app.include_router(file_router, prefix="/file", tags=["file"])

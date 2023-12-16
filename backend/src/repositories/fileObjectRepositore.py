@@ -14,6 +14,7 @@ class GetFileObjectRepositoreFilter:
     id: int | None = None
     name: str | None = None
 
+@dataclass(frozen=True)
 class PatchFileObjectRepositoreFilter:
     id: int
     name: str | None = None
@@ -33,17 +34,19 @@ class FileObjectRepostitore:
         else:
             raise ValueError("Invalid object_type specified.")
 
-    async def save_file(self, model: File):
-        async with self.session.begin():
-            stmt = insert(File).values(**model.dict())
-            await self.session.execute(stmt)
-            await self.session.commit()
+    async def save_file(self, file: File):
+        async with self.session.begin_nested():
+            self.session.add(file)
+            await self.session.flush()
+        await self.session.commit()
+        return file
 
-    async def save_folder(self, model: Folder):
-        async with self.session.begin():
-            stmt = insert(Folder).values(**model.dict())
-            await self.session.execute(stmt)
-            await self.session.commit()
+    async def save_folder(self, folder: Folder):
+        async with self.session.begin_nested():
+            self.session.add(folder)
+            await self.session.flush()
+        await self.session.commit()
+        return folder
 
     async def delete_file(self, filter: GetFileObjectRepositoreFilter):
         models = await self.read_file(filter)
@@ -89,7 +92,7 @@ class FileObjectRepostitore:
             file.name = filter.name
         if filter.path is not None:
             file.path = filter.path
-        return self.save_file(file)
+        return await self.save_file(file)
 
     async def update_folder(self, filter: PatchFileObjectRepositoreFilter):
         folder = await self._get_object_by_id(filter.id, "folder")
@@ -97,5 +100,5 @@ class FileObjectRepostitore:
             folder.name = filter.name
         if filter.path is not None:
             folder.path = filter.path
-        return self.save_folder(folder)
+        return await self.save_folder(folder)
 

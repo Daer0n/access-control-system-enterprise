@@ -22,5 +22,4 @@ class Folder(ObjectFileDirectory):
         return Folder(
             name=dto.name,
             path=dto.path,
-            files=[File.from_dto(file_dto) for file_dto in dto.files]
         )

@@ -18,6 +18,7 @@ class SaveFileDto(BaseModel):
     path: str
     body: bytes
     folder_id: int
+    access_type: FolderTypeAccess
 
 class SaveFolderDto(BaseModel):
     name: str

@@ -1,6 +1,7 @@
 from typing import Optional
 
 from fastapi_users import schemas
+from pydantic import BaseModel, Field
 
 
 class UserRead(schemas.BaseUser[int]):
@@ -23,3 +24,13 @@ class UserCreate(schemas.BaseUserCreate):
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False
     is_verified: Optional[bool] = False
+
+class FileCreate(BaseModel):
+    name: str
+    path: str
+    body: bytes = Field(..., description="Binary data of the file")
+    folder_id: int
+
+class FolderCreate(BaseModel):
+    name: str
+    path: str

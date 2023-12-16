@@ -11,8 +11,8 @@ from schemas.dtos import SaveFileDto, SaveFolderDto
 from repositories.fileObjectRepositore import FileObjectRepostitore, GetFileObjectRepositoreFilter, PatchFileObjectRepositoreFilter
 
 class FileObjectService:
-    def __init__(self, database: FileObjectRepostitore):
-        self._database = database
+    def __init__(self, db: AsyncSession):
+        self._database = FileObjectRepostitore(db) 
 
     @staticmethod
     @asynccontextmanager
@@ -27,11 +27,19 @@ class FileObjectService:
         return FileObjectService(database)
     
     async def save_file(self, dto: SaveFileDto):
-        model = File.from_dto(dto)
+        model = File(
+            name = dto.name,
+            path = dto.path,
+            body = dto.body,
+            folder_id = dto.folder_id
+        )
         return await self._database.save_file(model)
     
     async def save_folder(self, dto: SaveFolderDto):
-        model = Folder.from_dto(dto)
+        model = Folder(
+            name = dto.name,
+            path = dto.path
+        )
         return await self._database.save_folder(model)
     
     async def delete_file(self, filter: GetFileObjectRepositoreFilter):
@@ -45,3 +53,9 @@ class FileObjectService:
     
     async def read_folder(self, filter: GetFileObjectRepositoreFilter):
         return await self._database.read_folder(filter)
+
+    async def update_file(self, filter: GetFileObjectRepositoreFilter):
+        return await self._database.update_file(filter)
+    
+    async def update_folder(self, filter: GetFileObjectRepositoreFilter):
+        return await self._database.update_folder(filter)
