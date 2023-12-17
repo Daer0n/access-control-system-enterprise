@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./registration.css";
 import api from "../../../api/api";
+import AuthComponent from "../authentication/auth";
 
 const RegistrationComponent = () => {
     const [username, setUsername] = useState("Username");
@@ -9,6 +10,7 @@ const RegistrationComponent = () => {
     const [prevUsername, setPrevUsername] = useState("Username");
     const [prevEmail, setPrevEmail] = useState("Email");
     const [prevPassword, setPrevPassword] = useState("Password");
+    const [showAuth, setShowAuth] = useState(false);
 
     const handleUsernameClick = () => {
         setUsername("");
@@ -46,14 +48,21 @@ const RegistrationComponent = () => {
         }
     };
 
-    const handleAuth = async () => {
+    const handleRegistration = async () => {
         await api.post(`/auth/register/${username}/${email}/${password}`);
     };
 
-    return (
+    const handleAuthClick = () => {
+        setShowAuth(true);
+      };
+
+      return (
         <div className="auth-form">
+          {showAuth ? (
+            <AuthComponent />
+          ) : (
             <div className="block">
-                <div className="login">Registration</div>
+              <div className="registration">Registration</div>
                 <input
                     type="text"
                     value={username}
@@ -78,12 +87,19 @@ const RegistrationComponent = () => {
                     onBlur={handlePasswordBlur}
                     className="input"
                 />
-                <button className="submit" onClick={handleAuth}>
+                <button className="submit" onClick={handleRegistration}>
                     Submit
                 </button>
+              <div className="register-bottom">
+                <a href="#" onClick={handleAuthClick}>
+                  Login
+                </a>
+              </div>
             </div>
+          )}
         </div>
-    );
+      );
+
 };
 
 export default RegistrationComponent;

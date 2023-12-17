@@ -6,8 +6,7 @@ import RegistrationComponent from "./components/auth/registration/registration";
 function App() {
     return (
         <div className="app">
-
-            <RegistrationComponent />
+            <AuthComponent />
         </div>
     );
 }
