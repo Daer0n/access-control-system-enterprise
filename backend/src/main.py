@@ -5,10 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker
 from services.userService import UserService
 from services.fileObjectService import FileObjectService
 from database.database import engine
-from schemas.schemas import UserCreate, UserRead
-from auth.base_config import auth_backend, fastapi_users
 from routers.fileObjectRouter import create_router as create_file_object_router
 from routers.userRouter import create_router as create_user_router
+from routers.auth import create_router as create_auth_router
 
 
 
@@ -41,18 +40,9 @@ async def get_file_object_service():
         async with session.begin():
             service = FileObjectService(session)
             yield service
-
-app.include_router(
-    fastapi_users.get_auth_router(auth_backend),
-    prefix="/auth",
-    tags=["Auth"],
-)
-
-app.include_router(
-    fastapi_users.get_register_router(UserRead, UserCreate),
-    prefix="/auth",
-    tags=["Auth"],
-)
+   
+auth_router = create_auth_router(get_user_service)
+app.include_router(auth_router, prefix="/auth", tags=["auth"])
 
 user_router = create_user_router(get_user_service)
 app.include_router(user_router, prefix="/user", tags=["user"])

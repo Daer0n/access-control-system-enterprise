@@ -1,8 +1,6 @@
 import os
-#import jwt
 
 from typing import Annotated, Any, AsyncGenerator, Callable, Optional
-#from jose import JWTError
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Query, Request, status
 from pydantic import BaseModel
@@ -10,6 +8,8 @@ from pydantic import BaseModel
 from repositories.userRepository import GetUserFilter, PatchUserFilter
 from services.userService import UserService
 from schemas.schemas import UserCreate
+from routers.auth import hash_password
+
 
 
 SECRET_KEY = os.environ["SECRET_AUTH"]
@@ -23,38 +23,6 @@ def create_router(
     get_service: Callable[[], AsyncGenerator[UserService, Any]],
 ) -> APIRouter:
     router = APIRouter()
-
-    # async def get_current_user(
-    #     request: Request,
-    #     service: UserService = Depends(get_service),
-    # ):
-    #     credentials_exception = HTTPException(
-    #         status_code=status.HTTP_401_UNAUTHORIZED,
-    #         detail="Could not validate credentials",
-    #         headers={"WWW-Authenticate": "Bearer"},
-    #     )
-
-    #     token = request.cookies.get("access_token")
-    #     if not token:
-    #         raise credentials_exception
-
-    #     try:
-    #         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    #         username: str = payload.get("sub")
-    #         if username is None:
-    #             raise credentials_exception
-    #         token_data = TokenData(username=username)
-    #     except JWTError:
-    #         raise credentials_exception
-    #     result = await service.read_administator(
-    #         filter=GetUserFilter(full_name=token_data.username)
-    #     )
-    #     assert len(result) == 1
-    #     user = result[0]
-
-    #     if user is None:
-    #         raise credentials_exception
-    #     return user
 
     @router.post(
         "/administrator/{name}/{email}/{password}/",
@@ -70,7 +38,7 @@ def create_router(
             name=name,
             email=email,
             role='Administrator',
-            password=password
+            password=hash_password(password)
         )
         return await service.save_administrator(dto)
     
@@ -166,7 +134,7 @@ def create_router(
             name=name,
             email=email,
             role='Moderator',
-            password=password
+            password=hash_password(password)
         )
         return await service.save_moderator(dto)
     
@@ -232,7 +200,7 @@ def create_router(
             name=name,
             email=email,
             role='DefaultUser',
-            password=password
+            password=hash_password(password)
         )
         return await service.save_default_user(dto)
     

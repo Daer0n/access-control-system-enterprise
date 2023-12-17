@@ -11,7 +11,7 @@ from models.users.defaultUser import DefaultUser
 
 @dataclass(frozen=True)
 class GetUserFilter:
-    id: int
+    id: int | None = None
     name: str | None = None
 
 @dataclass(frozen=True)
