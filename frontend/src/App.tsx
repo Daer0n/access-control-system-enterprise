@@ -1,21 +1,13 @@
 import React from "react";
 import "./App.css";
-import 'bootstrap/dist/css/bootstrap.css';
+import AuthComponent from "./components/auth/authentication/auth";
 
 function App() {
-  return (
-    <div className="App">
-      <nav className="navbar">
-        <div className="App-logo">Access control system enterprise</div>
-        <div className="button-group">
-          <button className="btn btn-primary btn-lg mr-5">Log in</button>
-          <button className="btn btn-primary btn-lg">Log out</button>
+    return (
+        <div className="app">
+            <AuthComponent />
         </div>
-      </nav>
-
-      <div></div>
-    </div>
-  );
+    );
 }
 
 export default App;
