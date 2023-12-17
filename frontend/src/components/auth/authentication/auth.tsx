@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./auth.css";
 import api from "../../../api/api";
+import RegistrationComponent from "../registration/registration";
 
 const AuthComponent = () => {
     const [username, setUsername] = useState("Username");
