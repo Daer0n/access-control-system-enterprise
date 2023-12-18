@@ -1,16 +1,16 @@
 import React, { useState } from "react";
+import { Link,useNavigate } from 'react-router-dom';
 import "./registration.css";
 import api from "../../../api/api";
-import AdministratorMainPage from "../../pages/administratorMainPage/administratorMainPage";
 
-const RegistrationComponent = () => {
+
+const Registration = () => {
   const [username, setUsername] = useState("Username");
   const [email, setEmail] = useState("Email");
   const [password, setPassword] = useState("Password");
   const [prevUsername, setPrevUsername] = useState("Username");
   const [prevEmail, setPrevEmail] = useState("Email");
   const [prevPassword, setPrevPassword] = useState("Password");
-  const [registeredIn, setRegisteredIn] = useState(false);
   const [registrationError, setRegistrationError] = useState(false);
 
   const handleUsernameClick = () => {
@@ -53,16 +53,12 @@ const RegistrationComponent = () => {
   const handleRegistration = async () => {
     try {
       await api.post(`/auth/register/${username}/${email}/${password}`);
-      setRegisteredIn(true);
     } catch (error) {
       console.error("Registration failed", error);
+      alert("Registration failed")
       setRegistrationError(true);
     }
   };
-
-  if (registeredIn) {
-    return <AdministratorMainPage />;
-  }
 
   return (
     <div className="auth-form">
@@ -85,7 +81,7 @@ const RegistrationComponent = () => {
           className="input"
         />
         <input
-          type="text"
+          type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           onClick={handlePasswordClick}
@@ -95,9 +91,15 @@ const RegistrationComponent = () => {
         <button className="submit" onClick={handleRegistration}>
           Submit
         </button>
+
+        <span className="register-bottom">
+            <a href="">
+            <Link to="/">Login</Link>
+            </a>
+          </span>
       </div>
     </div>
   );
 };
 
-export default RegistrationComponent;
+export default Registration;
