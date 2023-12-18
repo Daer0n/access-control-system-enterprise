@@ -73,5 +73,10 @@
 
 .register-bottom a {
     margin-top: 10px;
-    display: block; 
+    display: block;
+}
+
+.input.error {
+    border: 1px solid red;
+    color: red;
 }

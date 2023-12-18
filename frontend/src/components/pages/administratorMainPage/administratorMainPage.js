@@ -1,6 +1,6 @@
 import React from "react";
 
-const RegistrationSuccessPage = () => {
+const AdministratorMainPage = () => {
   return (
     <div>
       <h1>Registration Successful</h1>
@@ -9,4 +9,4 @@ const RegistrationSuccessPage = () => {
   );
 };
 
-export default RegistrationSuccessPage;
+export default AdministratorMainPage;

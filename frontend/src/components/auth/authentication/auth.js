@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./auth.css";
 import api from "../../../api/api";
 import RegistrationComponent from "../registration/registration";
+import AdministratorMainPage from "../../pages/administratorMainPage/administratorMainPage";
 
 const AuthComponent = () => {
   const [username, setUsername] = useState("Username");
@@ -9,9 +10,13 @@ const AuthComponent = () => {
   const [prevUsername, setPrevUsername] = useState("Username");
   const [prevPassword, setPrevPassword] = useState("Password");
   const [showRegistration, setShowRegistration] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [loginError, setLoginError] = useState(false); // Добавлено состояние ошибки авторизации
+  const [passwordError, setPasswordError] = useState(false); // Добавлено состояние ошибки пароля
 
   const handleUsernameClick = () => {
     setUsername("");
+    setLoginError(false); // Сбрасывает состояние ошибки логина при клике на инпут
   };
 
   const handleUsernameBlur = () => {
@@ -24,6 +29,7 @@ const AuthComponent = () => {
 
   const handlePasswordClick = () => {
     setPassword("");
+    setPasswordError(false); // Сбрасывает состояние ошибки пароля при клике на инпут
   };
 
   const handlePasswordBlur = () => {
@@ -35,12 +41,23 @@ const AuthComponent = () => {
   };
 
   const handleAuth = async () => {
-    await api.post(`/auth/login/${username}/${password}`);
+    try {
+      await api.post(`/auth/login/${username}/${password}`);
+      setLoggedIn(true);
+    } catch (error) {
+      console.error("Authentication failed", error);
+      setLoginError(true); // Устанавливает ошибку логина
+      setPasswordError(true); 
+    }
   };
 
   const handleRegisterClick = () => {
     setShowRegistration(true);
   };
+
+  if (loggedIn) {
+    return <AdministratorMainPage />;
+  }
 
   return (
     <div className="auth-form">
@@ -55,15 +72,15 @@ const AuthComponent = () => {
             onChange={(e) => setUsername(e.target.value)}
             onClick={handleUsernameClick}
             onBlur={handleUsernameBlur}
-            className="input"
+            className={`input ${loginError ? "error" : ""}`} // Добавлено условие для применения класса "error" при ошибке логина
           />
           <input
-            type="text"
+            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             onClick={handlePasswordClick}
             onBlur={handlePasswordBlur}
-            className="input"
+            className={`input ${passwordError ? "error" : ""}`} // Добавлено условие для применения класса "error" при ошибке пароля
           />
           <button className="submit" onClick={handleAuth}>
             Submit
