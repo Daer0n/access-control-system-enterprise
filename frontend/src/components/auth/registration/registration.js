@@ -5,6 +5,7 @@ import api from "../../../api/api";
 
 
 const Registration = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("Username");
   const [email, setEmail] = useState("Email");
   const [password, setPassword] = useState("Password");
@@ -53,10 +54,11 @@ const Registration = () => {
   const handleRegistration = async () => {
     try {
       await api.post(`/auth/register/${username}/${email}/${password}`);
+      navigate("/administrator/main");
     } catch (error) {
+      setRegistrationError(true);
       console.error("Registration failed", error);
       alert("Registration failed")
-      setRegistrationError(true);
     }
   };
 

@@ -6,6 +6,7 @@ import Registration from "../registration/registration";
 import AdministratorMainPage from "../../pages/administratorMainPage/administratorMainPage";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState("Username");
   const [password, setPassword] = useState("Password");
   const [prevUsername, setPrevUsername] = useState("Username");
@@ -42,11 +43,12 @@ const Login = () => {
   const handleAuth = async () => {
     try {
       await api.post(`/auth/login/${username}/${password}`);
+      navigate("/administrator/main");
     } catch (error) {
-      console.error("Authentication failed", error);
-      alert("Authentication failed")
       setLoginError(true); 
       setPasswordError(true); 
+      console.error("Authentication failed", error);
+      alert("Authentication failed")
     }
   };
 
