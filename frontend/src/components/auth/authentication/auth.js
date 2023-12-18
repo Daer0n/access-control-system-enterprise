@@ -42,7 +42,7 @@ const Login = () => {
 
   const handleAuth = async () => {
     try {
-      await api.post(`/auth/login/${username}/${password}`);
+      await api.post(`/auth/login/${username}/${password}/`);
       navigate("/administrator/main");
     } catch (error) {
       setLoginError(true); 
