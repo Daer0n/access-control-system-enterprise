@@ -179,7 +179,7 @@ def create_router(
         return await service.read_all_folders()
     
     @router.get(
-        "/folder/{folder_id}/files",
+        "/folder/{folder_id}/files/",
         name="Get all files in folder",
     )
     async def read_all_files_from_folders(

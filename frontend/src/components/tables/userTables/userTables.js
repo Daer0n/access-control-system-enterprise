@@ -16,6 +16,7 @@ const UserTable = ({ users, onClick }) => {
                     <th>Name</th>
                     <th>Role</th>
                     <th>Email</th>
+                    <th>Delete</th>
                 </thead>
                 <tbody>
                     {users.map((user) => (
