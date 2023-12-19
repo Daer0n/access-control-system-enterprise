@@ -251,7 +251,33 @@ def create_router(
             email=email,
         )
         return await service.update_default_user(filter)
+    
+    @router.get(
+        "/administrators/",
+        name="Get all administrators",
+    )
+    async def read_all_administrators(
+        service: UserService = Depends(get_service),
+    ):
+        return await service.read_all_administrators()
         
+    @router.get(
+        "/moderators/",
+        name="Get all moderators",
+    )
+    async def read_all_moderatots(
+        service: UserService = Depends(get_service),
+    ):
+        return await service.read_all_moderators()
+    
+    @router.get(
+        "/users/",
+        name="Get all default users",
+    )
+    async def read_all_default_users(
+        service: UserService = Depends(get_service),
+    ):
+        return await service.read_all_default_users()
     
 
     return router

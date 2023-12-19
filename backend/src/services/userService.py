@@ -86,4 +86,14 @@ class UserService():
     async def change_moderator_role(self, filter: GetUserFilter):
         return await self._database.change_moderator_role(filter)
     
+    async def read_all_administrators(self):
+        return await self._database.read_all_administrators()
+    
+    async def read_all_moderators(self):
+        return await self._database.read_all_moderators()
+    
+    async def read_all_default_users(self):
+        return await self._database.read_all_default_users()
+    
+    
 

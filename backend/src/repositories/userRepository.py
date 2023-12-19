@@ -166,3 +166,28 @@ class UserRepository():
         else:
             raise ValueError("Moderator not found.")
         
+    async def read_all_administrators(self) -> list[Administrator]:
+        stmt = select(Administrator)
+        results = await self.session.scalars(stmt)
+        items = list(results.all())
+        if not items:
+            raise HTTPException(status_code=404, detail="Administrators not found")
+        return items 
+    
+    async def read_all_moderators(self) -> list[Moderator]:
+        stmt = select(Moderator)
+        results = await self.session.scalars(stmt)
+        items = list(results.all())
+        if not items:
+            raise HTTPException(status_code=404, detail="Moderators not found")
+        return items 
+    
+    async def read_all_default_users(self) -> list[DefaultUser]:
+        stmt = select(DefaultUser)
+        results = await self.session.scalars(stmt)
+        items = list(results.all())
+        if not items:
+            raise HTTPException(status_code=404, detail="Default users not found")
+        return items 
+    
+        

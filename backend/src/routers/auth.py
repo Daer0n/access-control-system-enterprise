@@ -34,7 +34,7 @@ def create_router(
     router = APIRouter()
 
 
-    @router.post("/login/{name}/{password}")
+    @router.post("/login/{name}/{password}/")
     async def login_user(
         name: str,
         password: str,
@@ -79,7 +79,7 @@ def create_router(
         await service.save_default_user(dto)
         return {"message": "User has been successfully registered"}
     
-    @router.post("/logout")
+    @router.post("/logout/")
     async def logout_user():
         response = ORJSONResponse({"message": "User has been logged out"})
         response.delete_cookie(key="access_token")
