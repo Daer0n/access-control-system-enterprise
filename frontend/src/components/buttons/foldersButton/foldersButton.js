@@ -1,12 +1,12 @@
 import React from "react";
-import "./foldersButton.css"
+import "./foldersButton.css";
 
-const FoldersButton = () => {
+const FoldersButton = ({ onClick }) => {
     return (
-        <button className="folders">
+        <button className="folders" onClick={onClick}>
             Folders
         </button>
-    )
-}
+    );
+};
 
-export default FoldersButton
+export default FoldersButton;
