@@ -10,45 +10,142 @@ import GetAllModeratorsButton from "../../buttons/usersButton/moderators/GetAllM
 import GetAllAdministratorsButton from "../../buttons/usersButton/administrators/GetAllAdministratorsButton";
 
 const AdministratorMainPage = () => {
-  const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
-  const [users, setUsers] = useState([]);
+    const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
+    const [defaultUsers, setDefaultUsers] = useState([]);
+    const [administrators, setAdministrators] = useState([]);
+    const [moderators, setModerators] = useState([]);
+    const [showDefaultUsersTable, setShowDefaultUsersTable] = useState(false);
+    const [showAdministratorsTable, setShowAdministratorsTable] =
+        useState(false);
+    const [showModeratorsTable, setShowModeratorsTable] = useState(false);
 
-  const handleUsersButtonClick = () => {
-    setShowAdditionalButtons((prevState) => !prevState);
-  };
+    const handleUsersButtonClick = () => {
+        setShowAdditionalButtons((prevState) => !prevState);
+        setShowAdministratorsTable(false);
+        setShowModeratorsTable(false);
+        setShowDefaultUsersTable(false);
+    };
 
-  const fetchDefaultUsers = async (id) => {
-    const response = await api.get(`/user/user/${id}`);
-    console.log(response.data);
-    setUsers(response.data); // Обновляем состояние users с полученными данными
-  };
+    const handleShowDefaultUsersTable = async () => {
+        await fetchDefaultUsers();
+        setShowDefaultUsersTable((prevState) => !prevState);
+        setShowAdministratorsTable(false);
+        setShowModeratorsTable(false);
+    };
 
-  const additionalButtons = showAdditionalButtons && (
-    <div className="additional-buttons">
-      <GetAllDefaultUsersButton onClick={() => fetchDefaultUsers(23)} />
-      <GetAllModeratorsButton />
-      <GetAllAdministratorsButton />
-    </div>
-  );
+    const handleAdministratorsButtonClick = () => {
+        setShowAdministratorsTable((prevState) => !prevState);
+    };
 
-  return (
-    <div className="main">
-      <nav className="nav-bar">
-        <div className="left-buttons">
-          <UsersButton onClick={handleUsersButtonClick} />
-          <FoldersButton />
+    const handleShowAdministratorsTable = async () => {
+        await fetchAdministrators();
+        setShowAdministratorsTable((prevState) => !prevState);
+        setShowDefaultUsersTable(false);
+        setShowModeratorsTable(false);
+    };
+
+    const handleModeratorsButtonClick = () => {
+        setShowModeratorsTable((prevState) => !prevState);
+    };
+
+    const handleShowModeratorsTable = async () => {
+        await fetchModerators();
+        setShowModeratorsTable((prevState) => !prevState);
+        setShowAdministratorsTable(false);
+        setShowDefaultUsersTable(false);
+    };
+
+    const handleDeleteDefaultusersClick = async (id) => {
+        try {
+            await api.delete(`/user/user/${id}`);
+            await fetchDefaultUsers();
+        } catch (error) {
+            console.error("Failed to delete user", error);
+            alert("Failed to delete user");
+        }
+    };
+
+    const handleDeleteAdministratorsClick = async (id) => {
+        try {
+            await api.delete(`/user/administrator/${id}`);
+            await fetchAdministrators();
+        } catch (error) {
+            console.error("Failed to delete administrator", error);
+            alert("Failed to delete administrator");
+        }
+    };
+
+    const handleDeleteModeratorsClick = async (id) => {
+        try {
+            await api.delete(`/user/moderator/${id}`);
+            await fetchAdministrators();
+        } catch (error) {
+            console.error("Failed to delete moderator", error);
+            alert("Failed to delete moderator");
+        }
+    };
+
+    const fetchDefaultUsers = async () => {
+        const response = await api.get("/user/users/");
+        console.log(response.data);
+        setDefaultUsers(response.data);
+    };
+
+    const fetchAdministrators = async () => {
+        const response = await api.get("/user/administrators/");
+        console.log(response.data);
+        setAdministrators(response.data);
+    };
+
+    const fetchModerators = async () => {
+        const response = await api.get("/user/moderators/");
+        console.log(response.data);
+        setModerators(response.data);
+    };
+
+    const additionalButtons = showAdditionalButtons && (
+        <div className="additional-buttons">
+            <GetAllDefaultUsersButton onClick={handleShowDefaultUsersTable} />
+            <GetAllModeratorsButton onClick={handleShowModeratorsTable} />
+            <GetAllAdministratorsButton onClick={handleShowAdministratorsTable} />
         </div>
-        <LogoutButton className="logout" />
-      </nav>
+    );
 
-      <div className="main-content">
-        <div className="content">
-          {additionalButtons}
-          {users.length > 0 && <UserTable users={users} />}
+    return (
+        <div className="main">
+            <nav className="nav-bar">
+                <div className="left-buttons">
+                    <UsersButton onClick={handleUsersButtonClick} />
+                    <FoldersButton />
+                </div>
+                <LogoutButton className="logout" />
+            </nav>
+
+            <div className="main-content">
+                <div className="content">
+                    {additionalButtons}
+                    {showDefaultUsersTable && (
+                        <UserTable
+                            users={defaultUsers}
+                            onClick={handleDeleteDefaultusersClick}
+                        />
+                    )}
+                    {showAdministratorsTable && (
+                        <UserTable
+                            users={administrators}
+                            onClick={handleDeleteAdministratorsClick}
+                        />
+                    )}
+                    {showModeratorsTable && (
+                        <UserTable
+                            users={moderators}
+                            onClick={handleDeleteModeratorsClick}
+                        />
+                    )}
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default AdministratorMainPage;
