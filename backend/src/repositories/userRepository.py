@@ -189,5 +189,4 @@ class UserRepository():
         if not items:
             raise HTTPException(status_code=404, detail="Default users not found")
         return items 
-    
         

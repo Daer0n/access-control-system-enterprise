@@ -63,3 +63,9 @@ class FileObjectService:
     
     async def change_file_rights(self, filter: PatchFileRightsFilter):
         return await self._database.change_file_rights(filter)
+    
+    async def read_all_folders(self):
+        return await self._database.read_all_folders()
+    
+    async def read_all_files_from_folders(self, folder_id: int):
+        return await self._database.read_all_files_from_folders(folder_id)

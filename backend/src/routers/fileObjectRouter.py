@@ -168,5 +168,24 @@ def create_router(
             access_type=access_type,
         )
         return await service.change_file_rights(filter)
+    
+    @router.get(
+        "/folders/",
+        name="Get all folders",
+    )
+    async def read_all_folders(
+        service: FileObjectService = Depends(get_service),
+    ):
+        return await service.read_all_folders()
+    
+    @router.get(
+        "/folder/{folder_id}/files",
+        name="Get all files in folder",
+    )
+    async def read_all_files_from_folders(
+        folder_id: int,
+        service: FileObjectService = Depends(get_service),
+    ):
+        return await service.read_all_files_from_folders(folder_id)
 
     return router

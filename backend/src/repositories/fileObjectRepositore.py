@@ -114,5 +114,22 @@ class FileObjectRepostitore:
         if file is not None:
             file.access_type = filter.access_type
         return await self.save_file(file)
+    
+    async def read_all_folders(self) -> list[Folder]:
+        stmt = select(Folder)
+        results = await self.session.scalars(stmt)
+        items = list(results.all())
+        if not items:
+            raise HTTPException(status_code=404, detail="Folders not found")
+        return items 
+    
+    async def read_all_files_from_folders(self, folder_id: int):
+        stmt = select(File).where(File.folder_id == folder_id)
+        results = await self.session.scalars(stmt)
+        items = list(results.all())
+        if not items:
+            raise HTTPException(status_code=404, detail="Files not found")
+        return items 
+        
 
 
