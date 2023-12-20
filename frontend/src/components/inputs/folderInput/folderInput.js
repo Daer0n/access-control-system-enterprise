@@ -48,7 +48,7 @@ const AddFolderInput = ({ onSubmit }) => {
                     />
                 </div>
 
-                <button type="submit" className="btn btn-primary mb-3">
+                <button type="submit" className="add-folder">
                     Submit
                 </button>
             </form>

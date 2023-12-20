@@ -13,6 +13,8 @@ const FolderTable = () => {
     const [showFiles, setShowFiles] = useState(false);
     const [selectedFolderId, setSelectedFolderId] = useState(null);
     const [showAddFolderForm, setShowAddFolderForm] = useState(false);
+    const [showTable, setShowTable] = useState(true);
+    const [showAddButton, setShowAddButton] = useState(true);
 
     useEffect(() => {
         fetchFolders();
@@ -32,17 +34,20 @@ const FolderTable = () => {
         setSelectedFolderId(folderId);
         setShowFiles(true);
         await fetchFiles(folderId);
+        setShowTable(false);
+        setShowAddButton(false);
+        setShowAddFolderForm(false);
     };
 
     const handleDeleteFoldersClick = async (id) => {
-      try {
-          await api.delete(`/file/folder/${id}`);
-          await fetchFolders();
-      } catch (error) {
-          console.error("Failed to delete folders", error);
-          alert("Failed to delete folders");
-      }
-  };
+        try {
+            await api.delete(`/file/folder/${id}`);
+            await fetchFolders();
+        } catch (error) {
+            console.error("Failed to delete folders", error);
+            alert("Failed to delete folders");
+        }
+    };
 
     const fetchFiles = async (folder_id) => {
         try {
@@ -68,8 +73,9 @@ const FolderTable = () => {
     const handleFormSubmit = async (name, path) => {
         try {
             await api.post(`file/folder/${name}/${path}/`);
-            // Обновление списка папок после успешного добавления
             await fetchFolders();
+            setShowAddFolderForm(false);
+            setShowTable(true);
         } catch (error) {
             console.error("Failed to add folder", error);
             alert("Failed to add folder");
@@ -78,53 +84,68 @@ const FolderTable = () => {
 
     const handleAddFolder = () => {
         setShowAddFolderForm(!showAddFolderForm);
+        setShowTable(false);
+        setShowAddButton(false);
+        setShowFiles(false);
     };
 
     return (
         <div className="container folders-table">
-            <h1>Folders</h1>
-            <table className="table table-striped table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Path</th>
-                        <th>Files</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {folders.map((folder) => (
-                        <tr key={folder.id}>
-                            <td>{folder.id}</td>
-                            <td>{folder.name}</td>
-                            <td>{folder.path}</td>
-                            <td>
-                                <button
-                                    onClick={() => handleShowFiles(folder.id)}
-                                >
-                                    <FontAwesomeIcon icon={faPlus} />
-                                </button>
-                            </td>
-                            <td>
-                                <button onClick={() => handleDeleteFoldersClick(folder.id)}>
-                                    <FontAwesomeIcon icon={faTimes} />
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
 
-            {showAddFolderForm ? (
-                <AddFolderInput onSubmit={handleFormSubmit} />
-            ) : (
+            {showTable && (
+                <table className="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Path</th>
+                            <th>Files</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {folders.map((folder) => (
+                            <tr key={folder.id}>
+                                <td>{folder.id}</td>
+                                <td>{folder.name}</td>
+                                <td>{folder.path}</td>
+                                <td>
+                                    <button
+                                        onClick={() =>
+                                            handleShowFiles(folder.id)
+                                        }
+                                    >
+                                        <FontAwesomeIcon icon={faPlus} />
+                                    </button>
+                                </td>
+                                <td>
+                                    <button
+                                        onClick={() =>
+                                            handleDeleteFoldersClick(folder.id)
+                                        }
+                                    >
+                                        <FontAwesomeIcon icon={faTimes} />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
+
+            {showAddButton && (
                 <button className="add-folder" onClick={handleAddFolder}>
                     Add folder
                 </button>
             )}
 
-            {showFiles && <FileTable files={files} onClick={handleDeleteFile} />}
+            {showAddFolderForm && (
+                <AddFolderInput onSubmit={handleFormSubmit} />
+            )}
+
+            {showFiles && (
+                <FileTable files={files} onClick={handleDeleteFile} />
+            )}
         </div>
     );
 };
