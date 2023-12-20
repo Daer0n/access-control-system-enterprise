@@ -8,6 +8,7 @@ const FileTable = ({ files, onClick }) => {
 
     return (
         <div className="container files-table">
+            <h1>Files</h1>
             <table className="table table-striped table-bordered table-hover">
                 <thead>
                     <tr>
@@ -15,7 +16,6 @@ const FileTable = ({ files, onClick }) => {
                         <th>Name</th>
                         <th>Path</th>
                         <th>Access type</th>
-                        <th>Body</th>
                         <th>Delete</th>
                     </tr>
                 </thead>
@@ -26,7 +26,6 @@ const FileTable = ({ files, onClick }) => {
                             <td>{file.name}</td>
                             <td>{file.path}</td>
                             <td>{file.access_type}</td>
-                            <td>{file.body}</td>
                             <td>
                                 <button
                                     onClick={() => {

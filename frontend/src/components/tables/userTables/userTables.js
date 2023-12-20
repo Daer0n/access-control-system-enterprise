@@ -9,7 +9,7 @@ const UserTable = ({ users, onClick }) => {
 
 
     return (
-        <div className="container users-table">
+        <div className="container">
             <table className="table table-striped table-bordered table-hover">
                 <thead>
                     <th>Id</th>

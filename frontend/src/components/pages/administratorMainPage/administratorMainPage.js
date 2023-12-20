@@ -13,7 +13,7 @@ import FolderTable from "../../tables/folderTables/folderTables";
 const AdministratorMainPage = () => {
     const [showAdditionalButtons, setShowAdditionalButtons] = useState(false);
     const [defaultUsers, setDefaultUsers] = useState([]);
-    const [folders, setFolders] = useState([]);
+
     const [administrators, setAdministrators] = useState([]);
     const [moderators, setModerators] = useState([]);
     const [showDefaultUsersTable, setShowDefaultUsersTable] = useState(false);
@@ -31,7 +31,6 @@ const AdministratorMainPage = () => {
     };
 
     const handleFoldersButtonClick = async () => {
-        await fetchFolders();
         setShowFoldersTable((prevState) => !prevState);
         setShowAdditionalButtons(false);
         setShowDefaultUsersTable(false);
@@ -93,38 +92,19 @@ const AdministratorMainPage = () => {
         }
     };
 
-    const handleDeleteFoldersClick = async (id) => {
-        try {
-            await api.delete(`/file/folder/${id}`);
-            await fetchFolders();
-        } catch (error) {
-            console.error("Failed to delete folders", error);
-            alert("Failed to delete folders");
-        }
-    };
-
     const fetchDefaultUsers = async () => {
         const response = await api.get("/user/users/");
-        console.log(response.data);
         setDefaultUsers(response.data);
     };
 
     const fetchAdministrators = async () => {
         const response = await api.get("/user/administrators/");
-        console.log(response.data);
         setAdministrators(response.data);
     };
 
     const fetchModerators = async () => {
         const response = await api.get("/user/moderators/");
-        console.log(response.data);
         setModerators(response.data);
-    };
-
-    const fetchFolders = async () => {
-        const response = await api.get("/file/folders/");
-        console.log(response.data);
-        setFolders(response.data);
     };
 
     const additionalButtons = showAdditionalButtons && (
@@ -168,12 +148,7 @@ const AdministratorMainPage = () => {
                             onClick={handleDeleteModeratorsClick}
                         />
                     )}
-                    {showFoldersTable && (
-                        <FolderTable
-                            folders={folders}
-                            onClick={handleDeleteFoldersClick}
-                        />
-                    )}
+                    {showFoldersTable && <FolderTable />}
                 </div>
             </div>
         </div>
