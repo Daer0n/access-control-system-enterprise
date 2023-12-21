@@ -93,18 +93,30 @@ const AdministratorMainPage = () => {
     };
 
     const fetchDefaultUsers = async () => {
-        const response = await api.get("/user/users/");
-        setDefaultUsers(response.data);
+        try {
+            const response = await api.get("/user/users/");
+            setDefaultUsers(response.data);
+        } catch(error) {
+            console.error("Failed to fetch users", error);
+        }
     };
 
     const fetchAdministrators = async () => {
-        const response = await api.get("/user/administrators/");
-        setAdministrators(response.data);
+        try {
+            const response = await api.get("/user/administrators/");
+            setAdministrators(response.data);
+        } catch (error) {
+            console.error("Failed to fetch administrators", error);
+        }
     };
 
     const fetchModerators = async () => {
-        const response = await api.get("/user/moderators/");
-        setModerators(response.data);
+        try {
+            const response = await api.get("/user/moderators/");
+            setModerators(response.data);
+        } catch(error) {
+            console.error("Failed to fetch moderators", error);
+        }
     };
 
     const additionalButtons = showAdditionalButtons && (

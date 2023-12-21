@@ -6,25 +6,27 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import FileInputForm from "../../inputs/fileInput/fileInput";
 
-const FileTable = ({ files, onClick }) => {
+const FileTable = ({ folder, files, onClick }) => {
   const [showAddForm, setShowAddForm] = useState(false);
 
   const showFileInputForm = () => {
+    console.log(folder);
     setShowAddForm(true);
   };
 
-  const handleFormSubmit = async (name, path, accessType, folderId) => {
+  const handleFormSubmit = async (name, path, accessType) => {
     try {
-      await api.post(`/file/file/${name}/${path}/${folderId}/${accessType}/`);
+      await api.post(`/file/file/${name}/${path}/${folder.id}/${accessType}/`);
       setShowAddForm(false);
     } catch {
       setShowAddForm(false);
     }
   };
 
+
   return (
     <div className="container files-table">
-      <h1>Files</h1>
+      <h1>Files in the "{folder.name}" folder</h1>
       {!showAddForm && (
         <table className="table table-striped table-bordered table-hover">
           <thead>

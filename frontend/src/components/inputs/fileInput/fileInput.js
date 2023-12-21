@@ -3,7 +3,6 @@ import React, { useState } from "react";
 const FileInputForm = ({ onSubmit }) => {
     const [name, setName] = useState("");
     const [path, setPath] = useState("");
-    const [folderId, setFolderId] = useState("");
     const [accessType, setAccessType] = useState("READ");
     const [file, setFile] = useState(null);
 
@@ -13,10 +12,6 @@ const FileInputForm = ({ onSubmit }) => {
 
     const handlePathChange = (event) => {
         setPath(event.target.value);
-    };
-
-    const handleFolderIdChange = (event) => {
-        setFolderId(event.target.value);
     };
 
     const handleAccessTypeChange = (event) => {
@@ -79,20 +74,6 @@ const FileInputForm = ({ onSubmit }) => {
                         <option value="WRITE">WRITE</option>
                         <option value="DELETE">DELETE</option>
                     </select>
-                </div>
-
-                <div className="mb-3">
-                    <label htmlFor="folder_id" className="form-label">
-                        Folder id
-                    </label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        id="folder_id"
-                        name="folder_id"
-                        onChange={handleFolderIdChange}
-                        value={folderId}
-                    />
                 </div>
 
                 <div className="mb-3">
