@@ -1,20 +1,23 @@
 import React, { useState } from "react";
+import "./patchFileForm.css"
 
-const AddFolderInput = ({ onSubmit }) => {
-    const [name, setName] = useState("");
-    const [path, setPath] = useState("");
+const PatchFileForm = ({ file, onSubmit }) => {
+    const [name, setName] = useState(file.name);
+    const [accessType, setAccessType] = useState(file.access_type);
 
     const handleNameChange = (event) => {
         setName(event.target.value);
     };
 
-    const handlePathChange = (event) => {
-        setPath(event.target.value);
+
+    const handleAccessTypeChange = (event) => {
+        setAccessType(event.target.value);
     };
+
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        onSubmit(name, path);
+        onSubmit(file.id, accessType);
     };
 
     return (
@@ -35,20 +38,23 @@ const AddFolderInput = ({ onSubmit }) => {
                 </div>
 
                 <div className="mb-3">
-                    <label htmlFor="path" className="form-label">
-                        Path
+                    <label htmlFor="access_type" className="form-label">
+                        Access type
                     </label>
-                    <input
-                        type="text"
+                    <select
                         className="form-control"
-                        id="path"
-                        name="path"
-                        onChange={handlePathChange}
-                        value={path}
-                    />
+                        id="access_type"
+                        name="access_type"
+                        value={accessType}
+                        onChange={handleAccessTypeChange}
+                    >
+                        <option value="READ">READ</option>
+                        <option value="WRITE">WRITE</option>
+                        <option value="DELETE">DELETE</option>
+                    </select>
                 </div>
 
-                <button type="submit" className="add-folder">
+                <button type="submit" className="add-file">
                     Submit
                 </button>
             </form>
@@ -56,4 +62,4 @@ const AddFolderInput = ({ onSubmit }) => {
     );
 };
 
-export default AddFolderInput;
+export default PatchFileForm;

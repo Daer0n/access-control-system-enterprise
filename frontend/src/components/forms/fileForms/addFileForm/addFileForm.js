@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import "./addFileForm.css"
 
-const FileInputForm = ({ onSubmit }) => {
+const AddFileForm = ({ onSubmit }) => {
     const [name, setName] = useState("");
     const [path, setPath] = useState("");
     const [accessType, setAccessType] = useState("READ");
@@ -97,4 +98,4 @@ const FileInputForm = ({ onSubmit }) => {
     );
 };
 
-export default FileInputForm;
+export default AddFileForm;

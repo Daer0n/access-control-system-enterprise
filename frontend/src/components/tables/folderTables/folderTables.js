@@ -5,7 +5,7 @@ import api from "../../../api/api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faPlus } from "@fortawesome/free-solid-svg-icons";
 import FileTable from "../fileTables/fileTables";
-import AddFolderInput from "../../inputs/folderInput/folderInput";
+import AddFolderForm from "../../forms/folderForms/addFolderForm";
 
 const FolderTable = () => {
   const [folders, setFolders] = useState([]);
@@ -131,7 +131,7 @@ const FolderTable = () => {
       )}
 
       {showAddFolderForm && (
-        <AddFolderInput onSubmit={handleFormSubmit} />
+        <AddFolderForm onSubmit={handleFormSubmit} />
       )}
 
       {showFiles && folder && (
