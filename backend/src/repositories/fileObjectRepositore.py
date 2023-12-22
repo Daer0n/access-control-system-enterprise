@@ -45,28 +45,42 @@ class FileObjectRepostitore:
         async with self.session.begin_nested():
             self.session.add(file)
             await self.session.flush()
-        await self.session.commit()
+        #await self.session.commit()
         return file
 
     async def save_folder(self, folder: Folder):
         async with self.session.begin_nested():
             self.session.add(folder)
             await self.session.flush()
-        await self.session.commit()
+        #await self.session.commit()
         return folder
 
     async def delete_file(self, filter: GetFileObjectRepositoreFilter):
         models = await self.read_file(filter)
         for model in models:
             await self.session.delete(model)
-        await self.session.commit()
+        #await self.session.commit()
         return {'ok': True}
     
     async def delete_folder(self, filter: GetFileObjectRepositoreFilter):
         models = await self.read_folder(filter)
         for model in models:
+            await self.delete_all_files_from_folder(model.id)
             await self.session.delete(model)
-        await self.session.commit()
+        #await self.session.commit()
+        return {'ok': True}
+    
+    async def delete_all_files_from_folder(self, folder_id: int):
+        try:
+            files = await self.read_all_files_from_folders(folder_id)
+            for file in files:
+                filter = GetFileObjectRepositoreFilter(
+                    id=file.id,
+                    name=file.name
+                )
+                await self.delete_file(filter)
+        except Exception:
+            pass
         return {'ok': True}
 
     async def read_file(self, filter: GetFileObjectRepositoreFilter) -> list[File]:

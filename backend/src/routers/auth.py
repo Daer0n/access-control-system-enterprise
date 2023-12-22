@@ -52,7 +52,7 @@ def create_router(
             data={"sub": user.name}, expires_delta=access_token_expires
         )
         response = ORJSONResponse(
-            {"access_token": access_token, "token_type": "bearer"}
+            {"access_token": access_token, "token_type": "bearer", "role": user.role, "name": user.name, "email": user.email}
         )
         response.set_cookie(
             key="access_token",
@@ -89,7 +89,7 @@ def create_router(
     async def _get_user(username: str, service: UserService) -> Union[Administrator, Moderator, DefaultUser]:
         filter = GetUserFilter(name=username)
         try:
-            result = await service.read_administrator(filter)
+            result = await service.read_administator(filter)
             if result:
                 return result[0]
         except:

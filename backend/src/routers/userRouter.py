@@ -236,7 +236,7 @@ def create_router(
 
 
     @router.patch(
-        "user/{id}/",
+        "/user/{id}/",
         name="Patch default user",
     )
     async def update_default_user(

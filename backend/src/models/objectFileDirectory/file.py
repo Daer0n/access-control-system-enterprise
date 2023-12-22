@@ -13,7 +13,7 @@ from schemas.dtos import SaveFileDto
 class File(ObjectFileDirectory):
     __tablename__ = 'File'
 
-    body = Column(LargeBinary, nullable=False)
+    body = Column(LargeBinary, nullable=True)
     access_type = Column(Enum(FolderTypeAccess))
 
     @declared_attr

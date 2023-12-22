@@ -37,7 +37,7 @@ class UserRepository():
         else:
             raise ValueError("Invalid user_type specified.")
 
-    async def save_administrator(self, administrator: Moderator):
+    async def save_administrator(self, administrator: Administrator):
         async with self.session.begin_nested():
             self.session.add(administrator)
             await self.session.flush()

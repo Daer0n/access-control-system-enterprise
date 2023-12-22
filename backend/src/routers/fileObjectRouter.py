@@ -22,14 +22,14 @@ def create_router(
     router = APIRouter()
 
     @router.post(
-        "/file/{name}/{path}/{folder_id}/",
+        "/file/{name}/{path}/{folder_id}/{access_type}/",
         name="Add file",
     )
     async def add_file(
         name: str, 
         path: str, 
         folder_id: int,
-        access_type: FolderTypeAccess,
+        access_type: str,
         body: UploadFile = File(...),
         service: FileObjectService = Depends(get_service),
     ):
@@ -38,7 +38,7 @@ def create_router(
             name=name,
             path=path,
             body=file_content,
-            access_type=access_type,
+            access_type=get_access_type_enum(access_type),
             folder_id=folder_id
         )
         return await service.save_file(dto)
@@ -153,19 +153,19 @@ def create_router(
         return await service.update_folder(filter)
     
     @router.patch(
-        "/user/{file_id}/",
+        "/user/{file_id}/{access_type}/",
         name="Change file rights",
     )
     async def change_file_rights(
         file_id: int, 
-        access_type: FolderTypeAccess,
+        access_type: str,
         name: Optional[str] = None,
         service: FileObjectService = Depends(get_service),
     ):
         filter = PatchFileRightsFilter(
             id=file_id, 
             name=name,
-            access_type=access_type,
+            access_type=get_access_type_enum(access_type),
         )
         return await service.change_file_rights(filter)
     
@@ -189,3 +189,13 @@ def create_router(
         return await service.read_all_files_from_folders(folder_id)
 
     return router
+
+def get_access_type_enum(access_type_str):
+    if access_type_str == "Read":
+        return FolderTypeAccess.READ
+    elif access_type_str == "Write":
+        return FolderTypeAccess.WRITE
+    elif access_type_str == "Delete":
+        return FolderTypeAccess.DELETE
+    else:
+        return None
