@@ -12,7 +12,6 @@ const UserTable = ({ users, onClick }) => {
         <div className="container">
             <table className="table table-striped table-bordered table-hover">
                 <thead>
-                    <th>Id</th>
                     <th>Name</th>
                     <th>Role</th>
                     <th>Email</th>
@@ -21,7 +20,6 @@ const UserTable = ({ users, onClick }) => {
                 <tbody>
                     {users.map((user) => (
                         <tr key={user.id}>
-                            <td>{user.id}</td>
                             <td>{user.name}</td>
                             <td>{user.role}</td>
                             <td>{user.email}</td>

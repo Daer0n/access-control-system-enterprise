@@ -37,6 +37,10 @@ const FileTable = ({ folder, onClick }) => {
 
   const handleFormSubmit = async (name, path, accessType) => {
     try {
+      console.log(folder.id)
+      console.log(name)
+      console.log(path)
+      console.log(accessType)
       await api.post(`/file/file/${name}/${path}/${folder.id}/${accessType}/`);
       setShowAddForm(false);
       fetchFiles(); 
@@ -71,7 +75,6 @@ const FileTable = ({ folder, onClick }) => {
         <table className="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>Id</th>
               <th>Name</th>
               <th>Path</th>
               <th>Access type</th>
@@ -82,7 +85,6 @@ const FileTable = ({ folder, onClick }) => {
           <tbody>
             {files.map((file) => (
               <tr key={file.id}>
-                <td>{file.id}</td>
                 <td>{file.name}</td>
                 <td>{file.path}</td>
                 <td>{file.access_type}</td>

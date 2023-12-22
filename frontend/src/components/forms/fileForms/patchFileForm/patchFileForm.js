@@ -48,9 +48,9 @@ const PatchFileForm = ({ file, onSubmit }) => {
                         value={accessType}
                         onChange={handleAccessTypeChange}
                     >
-                        <option value="READ">READ</option>
-                        <option value="WRITE">WRITE</option>
-                        <option value="DELETE">DELETE</option>
+                        <option value="Read">READ</option>
+                        <option value="Write">WRITE</option>
+                        <option value="Delete">DELETE</option>
                     </select>
                 </div>
 

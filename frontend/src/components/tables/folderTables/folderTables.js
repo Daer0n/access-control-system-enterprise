@@ -93,7 +93,6 @@ const FolderTable = () => {
         <table className="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>Id</th>
               <th>Name</th>
               <th>Path</th>
               <th>Files</th>
@@ -103,7 +102,6 @@ const FolderTable = () => {
           <tbody>
             {folders.map((folder) => (
               <tr key={folder.id}>
-                <td>{folder.id}</td>
                 <td>{folder.name}</td>
                 <td>{folder.path}</td>
                 <td>
