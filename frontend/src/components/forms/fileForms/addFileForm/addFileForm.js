@@ -19,7 +19,7 @@ const AddFileForm = ({ onSubmit }) => {
         setAccessType(event.target.value);
     };
 
-    const handleFileChange = (event) => {
+    const handleBodyChange = (event) => {
         const selectedFile = event.target.files[0];
         setFile(selectedFile);
     };
@@ -78,15 +78,15 @@ const AddFileForm = ({ onSubmit }) => {
                 </div>
 
                 <div className="mb-3">
-                    <label htmlFor="file" className="form-label">
-                        File
+                    <label htmlFor="body" className="form-label">
+                        Body
                     </label>
                     <input
                         type="file"
                         className="form-control"
-                        id="file"
-                        name="file"
-                        onChange={handleFileChange}
+                        id="body"
+                        name="body"
+                        onChange={handleBodyChange}
                     />
                 </div>
 
